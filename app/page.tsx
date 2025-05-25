@@ -1,0 +1,87 @@
+"use client";
+
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Mail } from "lucide-react";
+import { toast } from "sonner";
+
+export default function Home() {
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    const promise = () =>
+      new Promise<{ name: { email: string } }>((resolve) =>
+        setTimeout(() => resolve({ name: { email } }), 2000)
+      );
+
+    toast.promise(promise, {
+      loading: "submitting...",
+      success: (data) => {
+        return `${data.name.email} has been added`;
+      },
+      error: "Error",
+    });
+    setEmail("");
+  };
+
+  return (
+    <main className="min-h-screen bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* 3D Grid Background */}
+      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3109168/pexels-photo-3109168.jpeg?auto=compress&cs=tinysrgb&w=1920')] bg-cover bg-center opacity-30" />
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80" />
+
+      {/* Content Container */}
+      <div className="relative z-10 max-w-lg w-full space-y-12 animate-fade-in">
+        {/* Logo */}
+        <div className="text-center space-y-6">
+          <h1 className="text-7xl font-bold tracking-widest text-white uppercase">
+            Ionmail<span className="text-blue-500">.</span>io
+          </h1>
+          <p className="text-xl text-gray-400 tracking-wider">
+            Welcome to the secure and AI-enabled email engine. Please enter your
+            invitation code below:
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-white/40 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
+            <div className="relative bg-black/50 backdrop-blur-sm ring-1 ring-gray-800 rounded-lg p-6 space-y-4">
+              <p className="text-center text-gray-400 text-lg">
+                Please check back for an update soon.
+              </p>
+              <div className="relative flex space-x-2">
+                <Input
+                  type="email"
+                  placeholder="Enter your email for updates"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-white/5 border-gray-800 text-white placeholder:text-gray-600 rounded-full h-14"
+                />
+                <Button
+                  type="submit"
+                  className="absolute right-0 top-2 bg-transparent hover:bg-transparent text-white transition-colors duration-200 rounded-full"
+                >
+                  <ArrowRight size={24} className="" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div className="text-center text-gray-400 text-xl">
+          We will launch for the <span className="text-blue-500">general</span>{" "}
+          public <span className="text-blue-500">soon!</span>
+        </div>
+      </div>
+    </main>
+  );
+}
